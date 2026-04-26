@@ -1,6 +1,6 @@
-import { useState } from "react"
+import { useState, useRef } from "react"
 
-export default function RegisterCourse({ setCourses }) {
+export default function RegisterCourse({ registerCourse }) {
     const [course, setCourse] = useState({
         name: "",
         credits: 0,
@@ -8,6 +8,8 @@ export default function RegisterCourse({ setCourses }) {
         attending: false,
         difficulty: "Moderate"
     });
+
+    const nameRef = useRef();
 
     const setName = (event) => setCourse(c => {
         return { ...c, name: event.target?.value ?? "" };
@@ -30,14 +32,15 @@ export default function RegisterCourse({ setCourses }) {
     });
 
     const addCourse = () => {
-        setCourses(courses => [...courses, { ...course, id: Date.now() }]);
+        registerCourse({ ...course, id: Date.now() });
         setCourse({
             name: "",
             credits: 0,
             grade: 0,
             attending: false,
             difficulty: "Moderate"
-        })
+        });
+        nameRef.current?.focus();
     }
 
     return (
@@ -45,7 +48,7 @@ export default function RegisterCourse({ setCourses }) {
             <h2>Register Course</h2>
             <form style={{ border: "solid 1px black", width: "400px", padding: "1rem", borderRadius: ".5rem" }}>
                 <Field legend="Course Name" required>
-                    <input type="text" required value={course.name} onChange={setName} />
+                    <input type="text" required value={course.name} onChange={setName} ref={nameRef} />
                 </Field>
                 <Field legend="Course Credits" required>
                     <input type="number" required min={0} max={6} value={course.credits} onChange={setCredits} />

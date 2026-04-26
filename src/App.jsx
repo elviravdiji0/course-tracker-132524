@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useCallback } from 'react'
 import './App.css';
 import StudentCard from './components/StudentCard';
 import RegisterCourse from './components/RegisterCourse';
@@ -57,7 +57,11 @@ const COURSES = [
 function App() {
   const [courses, setCourses] = useState(COURSES);
 
-  const numberOfCourses = useMemo(() => courses.length, [courses])
+  const numberOfCourses = useMemo(() => courses.length, [courses]);
+
+  const registerCourse = useCallback((course) => {
+    setCourses(courses => [...courses, course]);
+  }, [courses])
 
   return (
     <div>
@@ -68,7 +72,7 @@ function App() {
           {courses.map(course => <StudentCard course={course} key={course.id} />)}
         </ul>
       </div>
-      <RegisterCourse setCourses={setCourses} />
+      <RegisterCourse registerCourse={registerCourse} />
     </div>
   )
 }
