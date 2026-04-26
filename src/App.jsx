@@ -1,5 +1,6 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import './App.css';
+import StudentCard from './components/StudentCard';
 
 const COURSES = [
   {
@@ -54,21 +55,16 @@ const COURSES = [
 
 function App() {
   const [courses, setCourses] = useState(COURSES);
+
+  const numberOfCourses = useMemo(() => courses.length, [courses])
+
   return (
     <div>
       <h2>Elvir Avdiji - #132524</h2>
       <div>
-        <h1>Courses</h1>
+        <h1>Courses ({numberOfCourses})</h1>
         <ul>
-          {courses.map(course => (
-            <div key={course.id} style={{ marginBlock: "3rem", border: "solid 1px black", width: "400px", padding: "1rem", borderRadius: ".5rem" }}>
-              <p>Name: {course.name}</p>
-              <p>Credits: {course.credits}</p>
-              <p>Grade: {course.grade}</p>
-              <p>Attending: {course.attending ? "Yes" : "No"}</p>
-              <p>Difficulty: {course.difficulty}</p>
-            </div>
-          ))}
+          {courses.map(course => <StudentCard course={course} key={course.id} />)}
         </ul>
       </div>
     </div>
